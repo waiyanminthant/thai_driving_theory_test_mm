@@ -96,7 +96,7 @@ q_id,q_txt,q_pic,a1_txt,a1_pic,a2_txt,a2_pic,a3_txt,a3_pic,a4_txt,a4_pic,ans_num
 95,How many years old must the car be before inspection is required when making the annual tax payment?,,3 years,,5 years,,7 years,,10 years,,3,7 years,"[""non-picture""]"
 96,"What is the speed limit within municipal limits, Bangkok, and Pattaya?",,70 Km/H,,80 Km/H,,90 Km/H,,100 Km/H,,2,80 Km/H,"[""non-picture""]"
 97,"What is the speed limit outside municipal limits, Bangkok and Pattaya?",,70 Km/H,,80 Km/H,,90 Km/H,,100 Km/H,,3,90 Km/H,"[""non-picture""]"
-98,"To park on the left driving lane, what is the maximum distance from the pavement to park or stop the vehicle?",,Not exceeding 20 centimeters,,Not exceeding 25 centimeters,,Not exceeding 30 centimeters,,Not exceeding 35 centimeters,,1,Not exceeding 25 centimeters,"[""non-picture""]"
+98,"To park on the left driving lane, what is the maximum distance from the pavement to park or stop the vehicle?",,Not exceeding 20 centimeters,,Not exceeding 25 centimeters,,Not exceeding 30 centimeters,,Not exceeding 35 centimeters,,2,Not exceeding 25 centimeters,"[""non-picture""]"
 99,Who is the person exempted from wearing motorcycle helmet when driving?,,Seniors over 65,,Traffic officers,,Motorcycle passengers,,"Novice, monk",,4,"Novice, monk","[""non-picture""]"
 100,What is the maximum passenger for motorcycle?,,1 passenger,,2 passengers,,3 passengers,,4 passengers,,1,1 passenger,"[""non-picture""]"
 101,How many years old must the motorcycle be before inspection is required when making the annual tax payment?,,1 year,,3 years,,5 years,,7 years,,3,5 years,"[""non-picture""]"

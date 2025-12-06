@@ -26,11 +26,21 @@ def create_app(*args, **kwargs):
     except (FileNotFoundError, configparser.NoOptionError):
         logging.warning("Configuration file not found. Proceeding with default values.")
 
+    try:
+        # Get the commit hash from github action
+        app.config["COMMIT"] = open("./commit", "r").readline()
+    except FileNotFoundError:
+        logging.warning("No commit hash specified")
+
+
     jwt = JWTManager(app)
 
     @app.context_processor
     def inject_now():
-        return {'now': datetime.utcnow()}
+        return {
+            'now': datetime.now(),
+            'commit': app.config.get("COMMIT", "unknown")
+        }
 
     @app.errorhandler(404)
     def not_found(e):

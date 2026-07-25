@@ -32,5 +32,6 @@ def update_user_token(
         "time_elapsed": time_elapsed or claims.get("time_elapsed"),
         "start_time": start_time or claims.get("start_time"),
         "time_remaining": time_remaining or claims.get("time_remaining"),
+        "lang": claims.get("lang", "en"),
     }
     set_access_cookies(resp, create_access_token(claims.get("sub"), additional_claims=exam_data))

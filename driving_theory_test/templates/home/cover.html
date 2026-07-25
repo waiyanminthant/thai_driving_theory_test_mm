@@ -4,10 +4,12 @@
     <h1>Thailand Driving License Theory Test Simulation 🚗</h1>
     <h2>(Car & Motorbike)</h2>
     <h2 class="thai">การทดสอบการขับขี่</h2>
+    <p class="text-muted">ထိုင်းနိုင်ငံ ယာဉ်မောင်းလိုင်စင် သီအိုရီ စာမေးပွဲ လေ့ကျင့်မှု</p>
     <br>
     <p class="lead">Mini is 10 questions, full is 50</p>
 
     <form class="answer_button" action="{{ url_for('exam.pre_exam') }}" method="post" novalidate>
+        <input type="hidden" name="lang" id="lang-input" value="en">
         <input type="submit" class="btn btn-lg btn-secondary fw-bold d-inline border-white bg-white mt-4 m-4"
                name="exam_type" value="Mini Exam"/>
         <input type="submit" class="btn btn-lg btn-secondary fw-bold d-inline border-white bg-white mt-4 m-4"

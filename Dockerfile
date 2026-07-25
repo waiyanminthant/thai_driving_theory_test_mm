@@ -6,4 +6,4 @@ COPY . /app
 
 RUN pip install -U .
 
-CMD ["gunicorn", "driving_theory_test:create_app()", "-b", "0.0.0.0:8000"]
+CMD gunicorn driving_theory_test:create_app() -b 0.0.0.0:$PORT

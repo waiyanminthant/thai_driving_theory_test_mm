@@ -1,31 +1,44 @@
 {% extends "layout/base.html" %}
 {% set active_page = 'exam' %}
-{% block title %}Theory Test{% endblock %}
+{% block title %}Theory Test / သီအိုရီ စာမေးပွဲ{% endblock %}
 {% block header %}
     <div class="d-flex flex-column flex-md-row align-items-center pb-3 mb-4 border-bottom">
         <a class="d-flex align-items-center text-white text-decoration-none">
-            <span class="fs-4">Theory Test Simulation</span>
+            <span class="fs-4">Theory Test Simulation / သီအိုရီ စာမေးပွဲ လေ့ကျင့်မှု</span>
         </a>
     </div>
 {% endblock %}
 {% block main %}
     <div class="p-5 mb-4 bg-dark bg-gradient text-white rounded-3">
         <div class="container-fluid py-5">
-            <p class="display-5 fw-bold text-center">Read first</p>
+            <p class="display-5 fw-bold text-center">Read first / ဦးစွာဖတ်ပါ</p>
             <br>
-            <ul class="mb-4">
-                <li><h5>You have {{ number_of_questions }} minutes to complete {{ number_of_questions }} questions.</h5></li>
-                <li><h5>Pass rate is 90%.</h5></li>
-                <li><h5>Questions answered incorrectly are revealed only upon finishing the test.</h5></li>
-                <li><h5>Navigate through questions using the buttons provided. Do not use your browser's 'back' or
-                    'refresh' button.</h5></li>
-                <li><h5>Wording of questions mimics the real exam. It will be occasionally confusing and often use
-                    non-native sounding English.</h5></li>
-            </ul>
+            <div class="row">
+                <div class="col-md-6">
+                    <h4 class="text-center">English</h4>
+                    <ul class="mb-4">
+                        <li><h5>You have {{ number_of_questions }} minutes to complete {{ number_of_questions }} questions.</h5></li>
+                        <li><h5>Pass rate is 90%.</h5></li>
+                        <li><h5>Questions answered incorrectly are revealed only upon finishing the test.</h5></li>
+                        <li><h5>Navigate through questions using the buttons provided. Do not use your browser's 'back' or 'refresh' button.</h5></li>
+                        <li><h5>Wording of questions mimics the real exam. It will be occasionally confusing and often use non-native sounding English.</h5></li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <h4 class="text-center">မြန်မာ</h4>
+                    <ul class="mb-4">
+                        <li><h5>သင့်တွင် မေးခွန်း {{ number_of_questions }} ခုကိုဖြေဆိုရန် {{ number_of_questions }} မိနစ် အချိန်ရှိပါသည်။</h5></li>
+                        <li><h5>အောင်မှတ်မှာ ၉၀% ဖြစ်သည်။</h5></li>
+                        <li><h5>မှားယွင်းသောအဖြေများကို စာမေးပွဲပြီးမှသာ ပြသပါမည်။</h5></li>
+                        <li><h5>ပေးထားသောခလုတ်များဖြင့်သာ မေးခွန်းများကိုရွှေ့ပါ။ Browser ၏ back သို့မဟုတ် refresh ခလုတ်ကို မသုံးပါနှင့်။</h5></li>
+                        <li><h5>မေးခွန်းများသည် တကယ့်စာမေးပွဲအတိုင်း ရေးသားထားပြီး ရံဖန်ရံခါတွင် ရှုပ်ထွေးနိုင်ပါသည်။</h5></li>
+                    </ul>
+                </div>
+            </div>
             <br>
             <form action="{{ url_for('exam.start_exam') }}" method="post">
             <span class="center">
-                <button class="btn btn-secondary btn-lg" type="submit">Confirm</button>
+                <button class="btn btn-secondary btn-lg" type="submit">Confirm / အတည်ပြုပါ</button>
             </span>
             </form>
         </div>

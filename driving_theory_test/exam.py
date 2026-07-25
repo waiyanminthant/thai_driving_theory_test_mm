@@ -11,7 +11,8 @@ from driving_theory_test.utils import format_duration, update_user_token
 
 bp = Blueprint("exam", __name__, url_prefix="/exam")
 
-exam_db = ExamQuestions("./driving_theory_test/questions_bank.csv")
+ExamQuestions.load_bank("./driving_theory_test/questions_bank.csv", "en")
+ExamQuestions.load_bank("./driving_theory_test/questions_bank_mm.csv", "mm")
 
 
 def _get_report_url(question_id) -> str:
@@ -24,8 +25,14 @@ def get_answer():
     claims = get_jwt()
     if claims.get("training_mode"):
         answers: list = claims.get("answers")
-        question = exam_db.get_question_id(answers[claims.get("current_index")][0])
-        return jsonify({"ans_id": question["ans_num"]})
+        qid = answers[claims.get("current_index")][0]
+        question_en = ExamQuestions.get_question_id(qid, "en")
+        question_mm = ExamQuestions.get_question_id(qid, "mm")
+        return jsonify({
+            "ans_id": question_en["ans_num"],
+            "en": {"ans_txt": question_en["ans_txt"], "ans_pic": question_en["ans_pic"]},
+            "mm": {"ans_txt": question_mm["ans_txt"], "ans_pic": question_mm["ans_pic"]}
+        })
     return make_response(jsonify({"error": "Exam mode... No cheating!"}), 400)
 
 
@@ -45,32 +52,43 @@ def results():
     score = 0
     #  Compute result
     for answer in answers:
-        question = exam_db.get_question_id(answer[0])
-        if question["ans_num"] == answer[1]:
+        qid = answer[0]
+        question_en = ExamQuestions.get_question_id(qid, "en")
+        question_mm = ExamQuestions.get_question_id(qid, "mm")
+        if question_en["ans_num"] == answer[1]:
             score += 1
         else:
+            def _pick_ans(q, ans_num):
+                if ans_num == "1":
+                    return {"txt": q["a1_txt"], "pic": q["a1_pic"]}
+                if ans_num == "2":
+                    return {"txt": q["a2_txt"], "pic": q["a2_pic"]}
+                if ans_num == "3":
+                    return {"txt": q["a3_txt"], "pic": q["a3_pic"]}
+                if ans_num == "4":
+                    return {"txt": q["a4_txt"], "pic": q["a4_pic"]}
+                return {"txt": None, "pic": None}
+            user_en = _pick_ans(question_en, answer[1])
+            user_mm = _pick_ans(question_mm, answer[1])
             wrong_answer = {
-                "true_answer": question["ans_num"],
-                "quest_txt": question["q_txt"],
-                "quest_pic": question["q_pic"],
-                "user_txt": None,
-                "user_pic": None,
-                "true_txt": question["ans_txt"],
-                "true_pic": None,
-                "q_id": question["q_id"],
+                "q_id": qid,
+                "en": {
+                    "quest_txt": question_en["q_txt"],
+                    "quest_pic": question_en["q_pic"],
+                    "true_txt": question_en["ans_txt"],
+                    "true_pic": None,
+                    "user_txt": user_en["txt"],
+                    "user_pic": user_en["pic"],
+                },
+                "mm": {
+                    "quest_txt": question_mm["q_txt"],
+                    "quest_pic": question_mm["q_pic"],
+                    "true_txt": question_mm["ans_txt"],
+                    "true_pic": None,
+                    "user_txt": user_mm["txt"],
+                    "user_pic": user_mm["pic"],
+                },
             }
-            if answer[1] == "1":
-                wrong_answer["user_txt"] = question["a1_txt"]
-                wrong_answer["user_pic"] = question["a1_pic"]
-            elif answer[1] == "2":
-                wrong_answer["user_txt"] = question["a2_txt"]
-                wrong_answer["user_pic"] = question["a2_pic"]
-            elif answer[1] == "3":
-                wrong_answer["user_txt"] = question["a3_txt"]
-                wrong_answer["user_pic"] = question["a3_pic"]
-            elif answer[1] == "4":
-                wrong_answer["user_txt"] = question["a4_txt"]
-                wrong_answer["user_pic"] = question["a4_pic"]
             failed_questions.append(wrong_answer)
 
     percent_s = int((score / number_of_questions) * 100)
@@ -139,18 +157,31 @@ def exam():
         current_index += 1
         resp = make_response(redirect(url_for("exam.exam")))
     else:
-        question = exam_db.get_question_id(answers[current_index][0])
+        qid = answers[current_index][0]
+        question_en = ExamQuestions.get_question_id(qid, "en")
+        question_mm = ExamQuestions.get_question_id(qid, "mm")
         question_formatted = {
-            "id": question["q_id"],
-            "question_text": question["q_txt"],
-            "question_pic": question["q_pic"],
-            "answers": {
-                "1": {"text": question["a1_txt"], "pic": question["a1_pic"]},
-                "2": {"text": question["a2_txt"], "pic": question["a2_pic"]},
-                "3": {"text": question["a3_txt"], "pic": question["a3_pic"]},
-                "4": {"text": question["a4_txt"], "pic": question["a4_pic"]}
+            "id": qid,
+            "en": {
+                "question_text": question_en["q_txt"],
+                "question_pic": question_en["q_pic"],
+                "answers": {
+                    "1": {"text": question_en["a1_txt"], "pic": question_en["a1_pic"]},
+                    "2": {"text": question_en["a2_txt"], "pic": question_en["a2_pic"]},
+                    "3": {"text": question_en["a3_txt"], "pic": question_en["a3_pic"]},
+                    "4": {"text": question_en["a4_txt"], "pic": question_en["a4_pic"]}
+                }
             },
-            # User answer
+            "mm": {
+                "question_text": question_mm["q_txt"],
+                "question_pic": question_mm["q_pic"],
+                "answers": {
+                    "1": {"text": question_mm["a1_txt"], "pic": question_mm["a1_pic"]},
+                    "2": {"text": question_mm["a2_txt"], "pic": question_mm["a2_pic"]},
+                    "3": {"text": question_mm["a3_txt"], "pic": question_mm["a3_pic"]},
+                    "4": {"text": question_mm["a4_txt"], "pic": question_mm["a4_pic"]}
+                }
+            },
             "user_ans": answers[current_index][1] if len(answers[current_index]) else 0
         }
 
@@ -163,7 +194,7 @@ def exam():
                 seconds=seconds_left,
                 training_mode=training_mode,
                 progress=int((current_index / number_of_questions) * 100),
-                report_url=_get_report_url(question["q_id"])
+                report_url=_get_report_url(qid)
             )
         )
 
@@ -217,13 +248,15 @@ def pre_exam():
     exam_type = data.get("exam_type")
     number_of_questions = 50 if exam_type == "Full Exam" else 10
     resp = make_response(redirect(url_for("exam.pre_exam")))
+    lang = data.get("lang", "en")
     exam_data = {
         "exam_type": exam_type,
         "training_mode": True if data.get("training_mode", False) else False,
         "number_of_questions": str(number_of_questions),
         "answers": [],
+        "lang": lang,
     }
-    for selected_question in exam_db.create_question_bank(number_of_questions):
+    for selected_question in ExamQuestions.create_question_bank(number_of_questions, lang):
         # Q_id, user answer
         exam_data["answers"].append(
             (

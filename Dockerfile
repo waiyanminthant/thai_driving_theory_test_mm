@@ -6,4 +6,6 @@ COPY . /app
 
 RUN pip install -U .
 
-CMD gunicorn driving_theory_test:create_app() -b 0.0.0.0:$PORT
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
+CMD ["/start.sh"]
